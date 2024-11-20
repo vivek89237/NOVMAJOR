@@ -6,16 +6,17 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  ActivityIndicator, // Import the ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { CartItems } from "../Context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import FinalCheckout from "./FinalCheckout";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import uploadCartItems from "../uploadCartItems";
-
+import MapScreen from "./MapScreen";
 
 const ViewCart = (props) => {
   const { setAdditems } = useContext(CartItems);
@@ -23,28 +24,30 @@ const ViewCart = (props) => {
   const navigation = useNavigation();
   const { cart, setCart } = useContext(CartItems);
   const [modal, setModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Add state for loader
+  const [isLoading, setIsLoading] = useState(false);
+  const [deliveryAddress, setDeliveryAddress] = useState(""); // State for delivery address
   const total = cart
     .map((item) => item.price * item.quantity)
     .reduce((prev, curr) => prev + curr, 0);
 
   const VendorName = props.VendorName;
   const ContactNo = props.ContactNo;
-  const onPress = () => {
-    setModal(false);
-    setCart([]);
-  };
 
-  const handleOrder = async () => {
-    setIsLoading(true); // Show loader
+  const confirmAddress = async () => {
+    setIsLoading(true); // Show loader when confirming address
+
     try {
-      await uploadCartItems(cart, setCart, VendorName, total, navigation, ContactNo);
+      await uploadCartItems(cart, setCart, VendorName, total, navigation, ContactNo, deliveryAddress);
       setCart([]);
       setAdditems(0);
       setModal(false);
     } finally {
       setIsLoading(false); // Hide loader after upload completes
     }
+  };
+
+  const openMap = () => {
+    navigation.navigate("MapScreen"); // Navigate to map screen
   };
 
   const checkOut = () => (
@@ -73,7 +76,7 @@ const ViewCart = (props) => {
       <View
         style={{
           backgroundColor: "white",
-          height: 400,
+          height: 500, // Increase height to accommodate new input
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
         }}
@@ -130,6 +133,62 @@ const ViewCart = (props) => {
           />
         </ScrollView>
 
+        {/* Address Input Section */}
+        <View style={{ padding: 10 }}>
+          <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}>
+            Enter Delivery Address
+          </Text>
+          <TextInput
+            style={{
+              borderColor: "#ccc",
+              borderWidth: 1,
+              padding: 8,
+              borderRadius: 5,
+              marginBottom: 10,
+            }}
+            placeholder="Enter address"
+            value={deliveryAddress}
+            onChangeText={setDeliveryAddress}
+          />
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <TouchableOpacity
+              onPress={confirmAddress}
+              style={{
+                backgroundColor: "#42E100",
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+                flex: 1,
+                marginRight: 5,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 16 }}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  "Confirm Address"
+                )}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={openMap} // Open map when pressed
+              style={{
+                backgroundColor: "#34A853",
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+                flex: 1,
+                marginLeft: 5,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 16 }}>
+                Open Map
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Grand Total Section */}
         <View
           style={{
             flexDirection: "row",
@@ -146,7 +205,7 @@ const ViewCart = (props) => {
         >
           <Text
             style={{
-              color: "#675DFF",
+              color: "#42E100", // Updated color
               fontWeight: "bold",
               paddingBottom: 3,
               fontSize: 17,
@@ -154,26 +213,24 @@ const ViewCart = (props) => {
           >
             Grand Total
           </Text>
-          <Text style={{ color: "#675DFF", fontSize: 17, fontWeight: "600" }}>
+          <Text style={{ color: "#42E100", fontSize: 17, fontWeight: "600" }}>
             {"₹"}{total}
           </Text>
         </View>
 
         <TouchableOpacity
-          onPress={handleOrder}
+          onPress={confirmAddress}
           style={{
-            backgroundColor: "#675DFF",
+            backgroundColor: "#42E100", // Updated color
             padding: 10,
             alignItems: "center",
           }}
           activeOpacity={0.9}
         >
+
+          
           <Text style={{ color: "white", fontSize: 17, fontWeight: "700" }}>
-            {isLoading ? ( 
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              "Place Order"
-            )}
+            Place Order
           </Text>
         </TouchableOpacity>
       </View>
@@ -190,7 +247,8 @@ const ViewCart = (props) => {
       >
         {checkOut()}
       </Modal>
-      <View style={{flex:1, paddingTop:80}}>
+
+      <View style={{ flex: 1, paddingTop: 80 }}>
         {total === 0 ? null : (
           <Pressable
             style={{
@@ -198,7 +256,7 @@ const ViewCart = (props) => {
               bottom: 30,
               left: 100,
               borderRadius: 6,
-              backgroundColor: "#675DFF",
+              backgroundColor: "#42E100",
             }}
             onPress={() => setModal(true)}
           >

@@ -27,10 +27,10 @@ const VegetableListVendor = ({ route }) => {
   const { cart, setCart, additems, setAdditems } = useContext(CartItems);
   const { menuData } = useContext(CartItems);
   const {ContactNo, name}=route.params;
-  console.log(name);
+  //console.log(name);
 
-  console.log(ContactNo);
-  console.log(route.params);
+  // console.log(ContactNo);
+  // console.log(route.params);
   
   
   // const items = menu;

@@ -55,7 +55,7 @@ export const updateVehicleInfo =(id, latitude, longitude)=>{
     let postToEdit = doc(vendorRef, id);
     updateDoc(postToEdit, {latitude: latitude, longitude: longitude})
     .then((res) => {
-        ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT);
+        ToastAndroid.show('Coordinates Updated', ToastAndroid.SHORT);
     })
     .catch((err) =>{
         ToastAndroid.show('Error', ToastAndroid.SHORT);
@@ -82,15 +82,21 @@ export const getPosts = (ContactNo, setData) =>{
 }
 
 
-export const getVendor = (ContactNo, setData) =>{
-    let commentQuery = query(postRef, where('ContactNo', '==', ContactNo));
-    onSnapshot(commentQuery, response =>{
+export const getVendorCoordinates = (ContactNo, setData) =>{
+    let vendorQuery = query(vendorRef, where('ContactNo', '==', ContactNo));
+    onSnapshot(vendorQuery, response =>{
             let data = response.docs.map((docs)=>docs.data());
-            console.log(data)
-            setData();
-        // console.log(response.docs.map((docs)=>{
-        //     return {...docs.data(), id: docs.id}
-        // }));
+            //console.log(data);
+            setData([data.latitude, data.longitude]);
+    })
+}
+
+export const getCustomerInfo = (ContactNo, setData) =>{
+    let customerQuery = query(customerRef, where('ContactNo', '==', ContactNo));
+    onSnapshot(customerQuery, response =>{
+            let data = response.docs.map((docs)=>docs.data());
+            console.log(data);
+            setData(data);
     })
 }
 
@@ -106,4 +112,6 @@ export const getComment=(postID, setComments)=>{
         return e;
     }
 }
+
+
 

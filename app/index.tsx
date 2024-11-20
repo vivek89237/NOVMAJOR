@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { BasketProvider } from "../Context"; // Ensure correct import
@@ -10,26 +10,26 @@ import OrderConfirmation from '../orderConfirmation';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
+import MapScreen from '~/components/MapScreen'; // Import MapScreen
 import Map from '~/components/Map';
 import VendorMap from '~/components/VendorMap';
 import ScooterProvider from '~/provider/ScooterProvider';
-import OrderTracking from '~/components/OrderTracking';
-
-
+import SearchFeature from '~/components/SearchFeature'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'; // For icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import { IconButton } from 'react-native-paper'; // Import IconButton
+import Login from '~/Auth/Login';
+import Detail from '~/Auth/Detail';
+import Dashboard from '~/Auth/Dashboard';
+import Fetch from '~/Auth/Fetch';
+import Home from '~/Auth/Home';
 
-import SearchFeature from '~/components/SearchFeature';
-import MapScreen from '~/components/MapScreen'; // Import MapScreen
 
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 function TabNavigator() {
   const navigation = useNavigation();
@@ -48,45 +48,37 @@ function TabNavigator() {
           } else if (route.name === 'Past Orders') {
             iconName = 'history';
             return <MaterialIcons name={iconName} size={size} color={color} />;
-          } 
+          }
         },
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: { backgroundColor: '#414442' }
       })}
     >
-      <Tab.Screen name="Home" component={Map}  options={{ headerShown: false }} />
-      <Tab.Screen name="Track Orders" component={MapScreen} />
+      <Tab.Screen name="Home" component={Map} options={{ headerShown: false }} />
+      <Tab.Screen name="Track Orders" component={CurrentOrder} />
       <Tab.Screen name="Past Orders" component={OrderHistory} />
     </Tab.Navigator>
   );
 }
 
 export default function App() {
-
   return (
     <BasketProvider>
       <ScooterProvider>
-        <Stack.Navigator>
-          {/* Main Tab Navigator */}
-
-          <Stack.Screen
-            name="MapScreen"
-            component={MapScreen}
-            options={{ title: 'Set Location' }}
-          />
+        {/* Main Tab Navigator */}
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+          <Stack.Screen name="Fetch" component={Fetch} options={{ headerShown: false }} />
           <Stack.Screen
             name="Main"
             component={TabNavigator}
             options={{ headerShown: false }}
           />
 
-          <Stack.Screen
-            name="Search"
-            component={SearchFeature}
-            options={{ headerShown: false }}
-          />
-          
           <Stack.Screen
             name="Map"
             component={Map}
@@ -98,28 +90,27 @@ export default function App() {
             component={VendorMap}
             options={{ title: 'Vendor Map' }}
           />
-
           <Stack.Screen
             name="OrderHistory"
             component={OrderHistory}
             options={{ title: 'Order History' }}
           />
 
-          <Stack.Screen 
-          name="VegetableListVendor" 
-          component={VegetableListVendor} 
-          options={{ headerLeft: null }} 
-          />
-
-          <Stack.Screen 
-          name="OrderConfirmation" 
-          component={OrderConfirmation} 
-          options={{ headerLeft: null }} 
+          <Stack.Screen
+            name="VegetableListVendor"
+            component={VegetableListVendor}
+            options={{ headerShown: false }}
           />
 
           <Stack.Screen
-            name="order-tracking"
-            component={OrderTracking}
+            name="OrderConfirmation"
+            component={OrderConfirmation}
+            options={{ headerLeft: null }}
+          />
+
+          <Stack.Screen
+            name="Search"
+            component={SearchFeature}
             options={{ headerShown: false }}
           />
 
@@ -137,7 +128,12 @@ export default function App() {
             })}
           />
 
-          
+          <Stack.Screen
+            name="MapScreen"
+            component={MapScreen}
+            options={{ title: 'Set Location' }}
+          />
+
         </Stack.Navigator>
 
         <StatusBar style="auto" />

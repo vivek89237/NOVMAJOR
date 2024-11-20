@@ -6,7 +6,7 @@ import {useScooter} from "~/provider/ScooterProvider";
 import MERA_THELA from "~/assets/MERA_THELA.jpeg"
 import { FontAwesome6 } from '@expo/vector-icons';
 
-export default function OrderTrackingSheet({selectedCustomer, isNearby, routeTime, routeDistance}){
+export default function OrderTrackingSheet({vendorName, routeTime, routeDistance}){
 
     const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -29,8 +29,7 @@ export default function OrderTrackingSheet({selectedCustomer, isNearby, routeTim
         <View style={{flexDirection:"row", alignItems:"center",  gap:10}}>
             <Image source={MERA_THELA} style={{width: 60, height: 60}} />
             <View style={{flex:1, gap:5}}>
-                <Text style={{color:"white", fontSize:20, fontWeight:'600'}} >{selectedCustomer?.name}</Text>
-                <Text style={{color:"gray", fontSize:15}} >{selectedCustomer?.id}</Text>
+                <Text style={{color:"white", fontSize:20, fontWeight:'600'}} >{vendorName}</Text>
             </View>
             <View style={{gap:8}}>
                 <View style ={{flexDirection:"row", alignItems:"center", gap: 5, alignSelf:'flex-start'}}>

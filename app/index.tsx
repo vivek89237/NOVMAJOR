@@ -15,6 +15,8 @@ import Map from '~/components/Map';
 import VendorMap from '~/components/VendorMap';
 import ScooterProvider from '~/provider/ScooterProvider';
 import SearchFeature from '~/components/SearchFeature'
+import OrderTracking from '~/components/OrderTracking';
+import CustomerProvider  from '~/provider/CustomerProvider';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'; // For icons
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -64,15 +66,17 @@ function TabNavigator() {
 
 export default function App() {
   return (
+    <CustomerProvider>
     <BasketProvider>
       <ScooterProvider>
         {/* Main Tab Navigator */}
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Navigator >
+        {/* <Stack.Navigator initialRouteName="Home"> */}
+          {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
           <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-          <Stack.Screen name="Fetch" component={Fetch} options={{ headerShown: false }} />
+          <Stack.Screen name="Fetch" component={Fetch} options={{ headerShown: false }} /> */}
           <Stack.Screen
             name="Main"
             component={TabNavigator}
@@ -133,12 +137,17 @@ export default function App() {
             component={MapScreen}
             options={{ title: 'Set Location' }}
           />
-
+          <Stack.Screen
+            name="Ordertracking"
+            component={OrderTracking}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
 
         <StatusBar style="auto" />
       </ScooterProvider>
     </BasketProvider>
+    </CustomerProvider>
   );
 }
 

@@ -27,7 +27,7 @@ export default function SelectedScooterSheet() {
         const from = point([newLocation.coords.longitude, newLocation.coords.latitude]);
         const to = point([selectedScooter.long, selectedScooter.lat]);
         const distance = getDistance(from, to, { units: 'meters' });
-        if (distance < 100) {
+        if (distance < 20000) {
           setIsNearby(true);
         }
       });
@@ -73,7 +73,7 @@ export default function SelectedScooterSheet() {
 
                     </View>
                     <View style={{ flex: 1, padding: 20 }}>
-                        {isNearby ? 
+                        {!isNearby ? 
                         <Button 
                         title='Order Now' 
                         style={{ backgroundColor: "#42E100" }} 

@@ -2,19 +2,26 @@ import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, FlatList, StyleSheet, ScrollView } from 'react-native';
 import { Card, Avatar, Button } from 'react-native-paper';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where  } from 'firebase/firestore';
 import { app } from '../firebaseConfig';
+import {useCustomer} from "~/provider/CustomerProvider";
 
 const db = getFirestore(app);
 
 const CurrentOrder = ({ navigation }) => {
   const [orders, setOrders] = useState([]);
-
+  const {customerContact} = useCustomer();
+  
   const fetchOrders = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'orders'));
+      const ordersQuery = query(
+        collection(db, 'orders'),
+        where("customerContact", '==', customerContact)
+      );
+      const querySnapshot = await getDocs(ordersQuery);
       const fetchedOrders = querySnapshot.docs.map((doc) => {
         const data = doc.data();
+        // console.log('customerContact',data);
         return {
           id: doc.id,
           VendorName: data.VendorName,
@@ -24,6 +31,7 @@ const CurrentOrder = ({ navigation }) => {
             name: item.name,
             quantity: item.quantity,
           })),
+          customerCoordinates: data.customerCoordinates,
           total: data?.total,
           status: data?.status,
           deliveryAddress: data.location,
@@ -87,7 +95,7 @@ const CurrentOrder = ({ navigation }) => {
           <Button
             mode="contained"
             onPress={() =>
-              navigation.navigate('order-tracking', {
+              navigation.navigate('Ordertracking', {
                 vendorContactNo: item.vendorContactNo,
                 vendorName: item.VendorName,
                 customerCoordinates: item.customerCoordinates,

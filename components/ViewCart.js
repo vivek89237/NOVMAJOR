@@ -17,15 +17,21 @@ import FinalCheckout from "./FinalCheckout";
 import { useNavigation } from "@react-navigation/native";
 import uploadCartItems from "../uploadCartItems";
 import MapScreen from "./MapScreen";
+import {useCustomer} from "~/provider/CustomerProvider";
+
 
 const ViewCart = (props) => {
   const { setAdditems } = useContext(CartItems);
-
+  const {customerContact, customerCoordinates} = useCustomer();
   const navigation = useNavigation();
   const { cart, setCart } = useContext(CartItems);
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState(""); // State for delivery address
+   // State for delivery address
+
+  const {customerAddress} = useCustomer();
+  //console.log(customerAddress)
+  const [deliveryAddress, setDeliveryAddress] = useState(customerAddress );
   const total = cart
     .map((item) => item.price * item.quantity)
     .reduce((prev, curr) => prev + curr, 0);
@@ -37,7 +43,7 @@ const ViewCart = (props) => {
     setIsLoading(true); // Show loader when confirming address
 
     try {
-      await uploadCartItems(cart, setCart, VendorName, total, navigation, ContactNo, deliveryAddress);
+      await uploadCartItems(cart, setCart, VendorName, total, navigation, ContactNo, deliveryAddress, customerContact, customerCoordinates);
       setCart([]);
       setAdditems(0);
       setModal(false);

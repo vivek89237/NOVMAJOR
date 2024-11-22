@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
-
+import MERA_THELA from "~/assets/MERA_THELA.jpeg"
 const RateOrder = ({ route, navigation }) => {
   const { orderData } = route.params; 
 
@@ -13,9 +13,9 @@ const RateOrder = ({ route, navigation }) => {
 
   const handleSubmit = () => {
 
-    console.log('Restaurant Rating:', rating.restaurant);
-    console.log('Item Ratings:', rating.items);
-    console.log('Review:', review);
+    // console.log('Restaurant Rating:', rating.restaurant);
+    // console.log('Item Ratings:', rating.items);
+    // console.log('Review:', review);
 
     navigation.goBack();
   };
@@ -25,7 +25,7 @@ const RateOrder = ({ route, navigation }) => {
       <Text style={styles.title}>Rate Your Order</Text>
 
       <View style={styles.restaurantContainer}>
-        <Image source={{ uri: orderData.restaurantImage }} style={styles.restaurantImage} />
+        <Image source={MERA_THELA} style={styles.restaurantImage} />
         <View style={styles.restaurantInfo}>
           <Text style={styles.restaurantName}>{orderData.VendorName}</Text>
           <View style={styles.ratingContainer}>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   submitButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#42E100',
     padding: 16,
     borderRadius: 5,
     alignItems: 'center',

@@ -13,8 +13,9 @@ import {
 } from 'firebase/firestore';
 
 let vendorRef = collection(firestore, "vendors");
-let customerRef = collection(firestore, "customer");
+let customerRef = collection(firestore, "customers");
 let postRef = collection(firestore, "vendors");
+
 // let postRef = doc(firestore, "users","51usiD0xVo3ba8Nd539w");
 
 // export const uploadVehicleInfo =(object)=>{
@@ -39,26 +40,37 @@ export const getVehicleInfo = (setAllStatus) =>{
     })
 }
 
-export const getCustomer = (setAllStatus) =>{
-    onSnapshot(customerRef, response =>{
-        setAllStatus(response.docs.map((docs)=>{
+export const getCustomer = (customerContact, setCustomer) =>{
+    //console.log(customerContact)
+    let customerQuery = query(customerRef, where('ContactNo', '==', customerContact));
+    onSnapshot(customerQuery, response =>{
+        setCustomer(response.docs.map((docs)=>{
             return {...docs.data(), id: docs.id}
-        }))
+        })[0])
         // console.log(response.docs.map((docs)=>{
         //     return {...docs.data(), id: docs.id}
-        // }));
+        // })[0]);
     })
 }
 
 
-export const updateVehicleInfo =(id, latitude, longitude)=>{
-    let postToEdit = doc(vendorRef, id);
-    updateDoc(postToEdit, {latitude: latitude, longitude: longitude})
-    .then((res) => {
-        ToastAndroid.show('Coordinates Updated', ToastAndroid.SHORT);
-    })
-    .catch((err) =>{
-        ToastAndroid.show('Error', ToastAndroid.SHORT);
+export const updateVehicleInfo =(ContactNo, latitude, longitude)=>{
+
+    let vendorQuery = query(vendorRef, where('ContactNo', '==', ContactNo));
+
+    onSnapshot(vendorQuery, response =>{
+        let docId = response.docs.map((docs)=>{
+            return docs.id;
+        });
+        let postToEdit = doc(vendorRef, docId);
+
+        updateDoc(postToEdit, {latitude: latitude, longitude: longitude})
+        .then((res) => {
+            ToastAndroid.show('Coordinates Updated', ToastAndroid.SHORT);
+        })
+        .catch((err) =>{
+            ToastAndroid.show('Error', ToastAndroid.SHORT);
+        })
     })
 }
 
@@ -86,8 +98,9 @@ export const getVendorCoordinates = (ContactNo, setData) =>{
     let vendorQuery = query(vendorRef, where('ContactNo', '==', ContactNo));
     onSnapshot(vendorQuery, response =>{
             let data = response.docs.map((docs)=>docs.data());
-            //console.log(data);
-            setData([data.latitude, data.longitude]);
+            //console.log(data[0].latitude);
+            setData([ data[0].longitude,data[0].latitude]);
+            //setData(coordinates);
     })
 }
 

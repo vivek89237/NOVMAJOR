@@ -1,6 +1,6 @@
 import {PropsWithChildren, createContext, useContext, useState, useEffect} from 'react';
-
-const customerContext = createContext({});
+import { getCustomer } from '~/utils/Firebase';
+const CustomerContext = createContext({});
 
 // customerLoginNumber
 const customerContact = 8349755538;
@@ -11,17 +11,17 @@ export default function CustomerProvider ({children} : PropsWithChildren) {
     useEffect(()=>{
       getCustomer(customerContact, setCustomer)
     }, [customer])
-
+    //console.log("customer", customer);
     return (
-    <ScooterContext.Provider value ={{
+    <CustomerContext.Provider value ={{
       customerName: customer.name, 
-      customerContact: customer.phone, 
+      customerContact: customer.ContactNo, 
       customerAddress : customer.address,  
       customerCoordinates : customer.coordinates
       }}>
         {children}
-    </ScooterContext.Provider>
+    </CustomerContext.Provider>
   )
 }
 
-export const useScooter = () => useContext(customerContext);
+export const useCustomer = () => useContext(CustomerContext);

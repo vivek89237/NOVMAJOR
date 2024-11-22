@@ -51,8 +51,8 @@ const VendorMap = ({route}) => {
       setDirection(newDirection);
       updateVehicleInfo(1234567890, myLocation.coords.longitude, myLocation.coords.longitude)
     };
-    setInterval(fetchDircections, 5000);
-  }, [])
+    setInterval(fetchDircections, 5*60*1000);
+  }, []);
 
   //console.log(route)
   return (

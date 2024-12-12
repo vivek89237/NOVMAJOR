@@ -15,8 +15,8 @@ const CurrentOrder = ({ navigation }) => {
   const fetchOrders = async () => {
     try {
       const ordersQuery = query(
-        collection(db, 'orders'),
-        where("customerContact", '==', customerContact)
+        collection(db, 'orders')
+        // where("customerContact", '==', customerContact)
       );
       const querySnapshot = await getDocs(ordersQuery);
       const fetchedOrders = querySnapshot.docs.map((doc) => {

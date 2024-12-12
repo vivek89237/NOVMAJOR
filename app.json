@@ -12,11 +12,19 @@
     "plugins": [
       
       [
+<<<<<<< HEAD
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoicGNob3VkaGFyeTI5IiwiYSI6ImNtMGlvcWR2eDBkMnoyaXF2M2xhOW1yNDAifQ.Oy5WfLr2z3PRg4rhwGbfwA",
           "RNMapboxMapsVersion": "11.0.0"
         }
+=======
+                "@rnmapbox/maps",
+                {
+                  "RNMapboxMapsDownloadToken": "",
+                  "RNMapboxMapsVersion": "11.0.0"
+                }
+>>>>>>> ebfd1b5cd56bea9d725a4cec0fca09b3fbbfd7f1
       ],
       [
         "expo-location",

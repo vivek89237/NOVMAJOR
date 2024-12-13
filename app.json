@@ -15,7 +15,7 @@
 <<<<<<< HEAD
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoicGNob3VkaGFyeTI5IiwiYSI6ImNtMGlvcWR2eDBkMnoyaXF2M2xhOW1yNDAifQ.Oy5WfLr2z3PRg4rhwGbfwA",
+          "RNMapboxMapsDownloadToken": "",
           "RNMapboxMapsVersion": "11.0.0"
         }
 =======

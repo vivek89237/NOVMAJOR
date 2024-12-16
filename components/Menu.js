@@ -26,7 +26,7 @@ const Menu = ({ menu, cart, setCart }) => {
 
   const updateCart = (quantity) => {
     const finalQuantity = calculateFinalQuantity(quantity);
-
+  
     if (finalQuantity > 0) {
       const itemIndex = cart.findIndex((item) => item.id === menu.id);
       if (itemIndex > -1) {
@@ -40,8 +40,13 @@ const Menu = ({ menu, cart, setCart }) => {
       } else {
         setCart([...cart, { ...menu, quantity: finalQuantity }]);
       }
+    } else {
+      // Remove the item if the quantity is 0
+      const updatedCart = cart.filter((item) => item.id !== menu.id);
+      setCart(updatedCart);
     }
   };
+  
 
   const handleQuantityChange = (value) => {
     const qty = parseFloat(value) || 0;
@@ -58,7 +63,7 @@ const Menu = ({ menu, cart, setCart }) => {
   };
 
   const removeFromCart = () => {
-    if (additems <= 0) return;
+    if (additems < 0) return;
     const quantity = calculateFinalQuantity(additems - 1);
     setAdditems(additems - 1);
     setInputQuantity((additems - 1).toString());
